@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+</head>
+ 
+<body>
+    <input type="text"  name="InNumber" id="age" align="center" style="height: 20px; width: 400px; font-size: 20px" placeholder="input your age...">
+    <form action="" method="get"> 
+    <label>Please select HR percentage</label> 
+    <select name="" id="HR"> 
+    <option value="50-60%">50-60%</option> 
+    <option value="60-70%">60-70%</option>
+    <option value="70-80%">70-80%</option>
+    <option value="80-90%">80-90%</option>
+    <option value="90-100%">90-100%</option>  
+    </select> 
+    </form> 
+    <input type="button" name="btn1" value="predict" align="center" onclick="send_data()">
+    <p>The recommend music list is below：</p>
+    <p id="music_list"></p>
+    <ol id="ol">
+        <!-- <li>Coffee <button>Coffee</button></li>
+        <li>Tea</li>
+        <li>Milk</li> -->
+      </ol>
+    <!-- <p>ewfwef</p> -->
+    <script src='static/jquery-3.3.1.min.js'></script>
+    <script type="text/javascript">
+    like = function(){
+        name = event.target.id;
+        alert(name);
+
+    };
+
+    dislike = function(){
+        name = event.target.id;
+        alert(name);
+    };
+
+    send_data = function(){
+        var data = {}
+        age = document.getElementById("age").value; 
+        HR = document.getElementById("HR").value;
+        data = {"age":age, "HR":HR};
+        $.ajax({
+        url: "predict",
+        type: "GET",
+        data: data,
+        dataType: "json",
+        success: function (data) {
+            var music_list = data['result']
+            var myol = document.getElementById("ol");
+            var t = myol.childNodes.length;
+            alert(t)
+            for(var i=t-1; i>0; i--){
+                myol.removeChild(myol.childNodes[i]);
+            }
+            for(var i=0; i<music_list.length; i++){
+                var music_name = music_list[i].name
+        
+                var li = document.createElement("li");
+                li.innerHTML = music_name;
+            
+             //like
+                var bt = document.createElement("button");
+                bt.innerHTML = 'like';
+                bt.setAttribute('id', music_name);
+                bt.onclick = function(){
+                    name = event.target.id;
+                data = {"name":name};
+                    $.ajax({
+                    url: "like",
+                    type: "POST",
+                    data: data,
+                    dataType: "json",
+                    success: function (data) {
+
+                        alert(data['result']);            
+                }
+                    });
+                }
+                li.appendChild(bt);
+
+                //dislike
+                var dislike_bt = document.createElement("button");
+                dislike_bt.innerHTML = 'dislike';
+                dislike_bt.setAttribute('id', music_name);
+                dislike_bt.onclick = function(){
+                    name = event.target.id;
+                data = {"name":name};
+                    $.ajax({
+                    url: "dislike",
+                    type: "POST",
+                    data: data,
+                    dataType: "json",
+                    success: function (data) {
+                        alert(data['result']);             
+                }
+                    });
+                }
+                li.appendChild(dislike_bt);
+                myol.appendChild(li);
+        } 
+    }
+})
+};
+
+//             var ul=document.getElementById("u"); 
+// //创建元素Li
+// var li=document.createElement("li");
+// //向li中添加内容
+// li.innerHTML=text1;
+// //向ul追加元素li
+// ul.appendChild(li);
+        // }
+        // })
+    
+	</script>
+    
+</body>
+ 
+</html>
